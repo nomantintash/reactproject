@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {  connect } from 'react-redux';
 import { authStateChanged} from '../actions/social-signin-action';
+import { getMediaFromFirebase } from '../actions/media-action';
 import Login from './login';
 import Home from './home';
 import loadingGif from '../assets/loader.gif';
@@ -10,6 +11,7 @@ class App extends Component {
 
     componentWillMount () {
         this.props.authStateChanged ();
+        this.props.getMediaFromFirebase ();
     };
     
     render () {
@@ -43,4 +45,4 @@ const styles = {
     }
 };
 
-export default connect (mapStateToProps, { authStateChanged })(App);
+export default connect (mapStateToProps, { authStateChanged, getMediaFromFirebase })(App);
