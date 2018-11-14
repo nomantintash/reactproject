@@ -17,7 +17,7 @@ class SideBar extends Component {
                 <div key = {menu.name}>
                     <Button  fullWidth = {true} className={this.props.classes.button} key = {menu.name}>
                     <Link to={menu.route} >
-                        <div > {menu.name}</div>
+                        <div style = {styles.menuColor}> {menu.name}</div>
                     </Link>
                     </Button>  
                 </div>
@@ -34,9 +34,11 @@ class SideBar extends Component {
 
                 <img src = { this.props.user.photoURL } style = {styles.profilepic}/>
                 <p>{this.props.user.displayName}</p>
-                <hr/>
+                <div style = { styles.menu }>
                 { this.renderMenu() }
-                <Button fullWidth = {true} onClick = { this.logout }>Logout</Button>
+                </div>
+                
+                <Button fullWidth = {true} onClick = { this.logout } style = {styles.logout}>Logout</Button>
             </div>
         );
     };
@@ -53,6 +55,15 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         paddingTop: '20px'
+    },
+    menuColor: {
+        color: '#3DB4B4',
+    },
+    menu:{
+        marginTop: '20px'
+    },
+    logout: {
+        color: '#B43D53'
     },
     profilepic: {
         marginTop: '20px',

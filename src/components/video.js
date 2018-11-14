@@ -23,6 +23,7 @@ function renderMediaObjects (media, userId = null, searchText = null, props) {
                     <video style = {styles.imageStyle} className = "card-img-top mediaBox">
                     <source src={media[key].mediaURL}/>
                     </video>
+                    <div style = {styles.iconBackground}>
                     <span>
                       <i className="far fa-thumbs-up" style =  {styles.iconStyle}></i>
                       { media[key].likes? Object.keys(media[key].likes).length : 0}
@@ -36,6 +37,7 @@ function renderMediaObjects (media, userId = null, searchText = null, props) {
                       <i className="fas fa-eye" style = {styles.iconStyle}></i>
                       { media[key].views? Object.keys(media[key].views).length : 0}
                     </span>
+                    </div>
                   </div>
                   <div className="card-footer bg-transparent border-0">
                     <small className="text-muted">{moment(media[key].uploadedTime).fromNow()}</small>
@@ -64,8 +66,11 @@ const styles = {
     backgroundColor: '#f0f5f5'
   },
   iconStyle: {
-    marginRight: '10px',
+    marginRight: '5px',
     marginLeft: '5px'
+  },
+  iconBackground: {
+    backgroundColor: '#EEEEEE'
   },
   imageStyle:{
     backgroundColor: 'black',
