@@ -21,8 +21,6 @@ const Home = () => {
     );
 }
 
-export default Home;
-
 const styles = {
     container: {
         display: 'flex',
@@ -33,3 +31,5 @@ const styles = {
         display: 'flex',
     }
 };
+
+export default Home;
