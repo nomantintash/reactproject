@@ -8,7 +8,8 @@ class MediaUpload extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            description: ''
+            description: '',
+            publish: false
         };
     }
     onMediaDrop (files) {
@@ -17,16 +18,23 @@ class MediaUpload extends Component {
             alert ('Video description is required');
             return;
         }
-        const description = this.state.description;
-        this.setState ({description: ''});
-        this.uploadMediaToFirebase (file, description);
+        const metadata = {
+            description: this.state.description,
+            publish: this.state.publish
+        }
+        this.setState ({description: '', publish: false});
+        this.uploadMediaToFirebase (file, metadata);
     };
 
-    uploadMediaToFirebase (media, description) {
-        this.props.firebaseMediaUpload (media, description, this.props.user.uid);
+    uploadMediaToFirebase (media, metadata) {
+        metadata.userId = this.props.user.uid;
+        this.props.firebaseMediaUpload (media, metadata);
     };
     descriptionChangeHandler=(event) => {
         this.setState ({description: event.target.value});
+    }
+    setPublishFlag = () => {
+        this.setState({publish: true});
     }
 
     render () {
@@ -41,9 +49,14 @@ class MediaUpload extends Component {
                     </Dropzone>
                 </div>
                 </div>
+                
                 <div style = { Object.assign({}, styles.div, styles.inputDiv) }>
                     <input type= "text" placeholder = "Type video description" onChange = { this.descriptionChangeHandler } className="form-control" style = {styles.inputField}/>
                 </div>
+                <div className="checkbox">
+                <label><input type="checkbox" onChange = {this.setPublishFlag}/>Publish</label>
+                </div>
+                
             </div>
         );
     }

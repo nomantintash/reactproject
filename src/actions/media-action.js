@@ -14,13 +14,13 @@ export const COMMENT_ADDED = 'COMMENT_ADDED'
 const fbdatabase = firebase.database();
 const mediaRef = fbdatabase.ref('media');
 
-export function firebaseMediaUpload (media, description, userId) {
+export function firebaseMediaUpload (media, metadata) {
     return (dispatch) => {
         dispatch({
             type: UPLOADING_MEDIA,
             payload: null
         });
-        uploadMedia(media, description, userId).then((results) => {
+        uploadMedia(media, metadata).then((results) => {
             dispatch ({
                 type: UPLOAD_SUCCESFULL,
                 payload: null
