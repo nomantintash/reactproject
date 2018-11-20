@@ -70,16 +70,25 @@ class MediaUpload extends Component {
                 <div style = { Object.assign({}, styles.div, styles.inputDiv) }>
                     <input type= "text" placeholder = "Type video description" onChange = { this.descriptionChangeHandler } className="form-control" style = {styles.inputField}/>
                 </div>
-                <div className="checkbox">
-                <label><input type="checkbox" onChange = {this.setPublishFlag}/>Publish</label>
-                <TimePicker
-                style={{ width: 100 }}
-                showSecond={showSecond}
-                defaultValue={moment()}
-                className="xxx"
-                onChange={this.onChange}
-                />
+                <div style = {styles.publishDiv}>
+                    <div>
+                    <div className="checkbox">
+                        <label><input type="checkbox" onChange = {this.setPublishFlag}/><span style = {styles.publishDiv.text}>Publish Later</span></label>
+                    </div>
+                    </div>
+                    <div>
+                        <span style = {styles.publishDiv.text}>Schedule on: </span>
+                    <TimePicker
+                        style={{ width: 100 }}
+                        showSecond={showSecond}
+                        defaultValue={moment()}
+                        className="xxx"
+                        onChange={this.onChange}
+                    />
+                    </div>
+                    
                 </div>
+                
                 
             </div>
         );
@@ -101,6 +110,15 @@ const styles = {
         flexGrow: '1',
         flexDirection: 'column',
         justifyContent: 'center'
+    },
+    publishDiv: {
+        display: 'flex',
+        flexDirection: 'row',
+        paddingTop: '10px',
+        text: {
+            fontSize: '15px',
+            marginLeft: '10px'
+        }
     },
     image: {
         position: 'fixed',
