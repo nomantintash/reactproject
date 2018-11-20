@@ -3,7 +3,7 @@ const storageUrl = 'media/';
 const fbdatabase = firebase.database();
 const mediaRef = fbdatabase.ref('media');
 
-export function uploadMedia (file, metdata) {
+export function uploadMedia (file, metadata) {
     const randomFileName = Date.now()
     const storageRef = firebase.storage().ref(`${storageUrl}/${randomFileName}`);
 
@@ -11,9 +11,10 @@ export function uploadMedia (file, metdata) {
         const uploadedURL = await snapshot.ref.getDownloadURL();
         await addMediaRecord({ 
             'mediaURL': uploadedURL,
-            'userId': metdata.userId,
-            'description': metdata.description,
-            'published': metdata.publish
+            'userId': metadata.userId,
+            'description': metadata.description,
+            'published': metadata.publish,
+            'publishTime': metadata.publishTime
         });
         return snapshot;
     }).catch (err => {
