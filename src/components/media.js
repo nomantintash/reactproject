@@ -11,20 +11,6 @@ class Media extends Component {
       videos: ""
     };
   };
-  
-  componentWillReceiveProps(nextProps) {
-    const {media} = nextProps;
-    if(media) {
-      let videos = Object.keys(media).filter(key => {
-        return media[key].published
-      });
-      videos = videos.map(key => {
-        media[key].key = key;
-        return media[key]
-      });
-      this.setState({videos});
-    }
-  }
   renderMedia = () => {
     if (!this.props.media) 
       return ( 
@@ -33,7 +19,14 @@ class Media extends Component {
           Loading Media
         </div>
       );
-    const { videos }  = this.state;
+      const { media } = this.props;
+      let videos = Object.keys(media).filter(key => {
+        return media[key].published
+      });
+      videos = videos.map(key => {
+        media[key].key = key;
+        return media[key]
+      });
     return <Video {...this.props} searchText = { this.state.searchText } media = {videos}/>
   };
 

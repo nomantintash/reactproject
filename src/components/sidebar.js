@@ -15,11 +15,13 @@ class SideBar extends Component {
         const menu = Menu.map(menu => {
             return (
                 <div key = {menu.name}>
+                <Link to={menu.route} >
                     <Button  fullWidth = {true} className={this.props.classes.button} key = {menu.name}>
-                    <Link to={menu.route} >
+                    
                         <div style = {styles.menuColor}> {menu.name}</div>
+                    
+                    </Button>
                     </Link>
-                    </Button>  
                 </div>
             );
         });
