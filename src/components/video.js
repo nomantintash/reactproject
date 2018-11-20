@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import loaderGif from '../assets/loader.gif';
 const Video = ({media, userId, searchText,...props}) => {
     return (
         renderMediaObjects(media, userId, searchText, props)
@@ -7,9 +8,13 @@ const Video = ({media, userId, searchText,...props}) => {
 }
 
 function renderMediaObjects (media, userId = null, searchText = null, props) {
-    if (!media) return (<div>Media not found</div>)
+    if (!media) return ( 
+      <div style = { styles.loadingDiv }>
+        <img src = {loaderGif}  height = "150px" width = "150px"/> 
+        Loading Media
+      </div>
+    );
     const videos =  media.map (media => {
-      console.log('renderMediaObjects', media)
       if ( searchText === media.description || userId === media.userId || searchText === "") {
           return (
               <div
@@ -67,6 +72,14 @@ const styles = {
   },
   cardStyle: {
     backgroundColor: '#f0f5f5'
+  },
+  loadingDiv: {
+    marginTop: '85px',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
   },
   iconStyle: {
     marginRight: '5px',

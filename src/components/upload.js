@@ -51,7 +51,12 @@ class MediaUpload extends Component {
     }
     onChange = (value) => {
         const currentData  = moment().format("YYYY-MM-DD")
-        this.setState ({publishTime: currentData + " " + value.format(str)});
+        const dateString = currentData + " " + value.format(str);
+        const dateTimeParts = dateString.split(' ');
+        const timeParts = dateTimeParts[1].split(':');
+        const dateParts = dateTimeParts[0].split('-');
+        const timestamp = new Date(dateParts[0], parseInt(dateParts[1], 10) - 1, dateParts[2], timeParts[0], timeParts[1]);
+        this.setState ({publishTime: timestamp.getTime()});
     }
 
     render () {
