@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Video from './video'
-import { publishVideoFB } from '../actions/media-action';
 class MyVideos extends Component {
     state = {
         videos: []
