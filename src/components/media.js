@@ -7,10 +7,10 @@ class Media extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchText: ""
+      searchText: "",
+      videos: ""
     };
   };
-  
   renderMedia = () => {
     if (!this.props.media) 
       return ( 
@@ -19,8 +19,15 @@ class Media extends Component {
           Loading Media
         </div>
       );
-    
-    return <Video {...this.props} searchText = { this.state.searchText } />
+      const { media } = this.props;
+      let videos = Object.keys(media).filter(key => {
+        return media[key].published
+      });
+      videos = videos.map(key => {
+        media[key].key = key;
+        return media[key]
+      });
+    return <Video {...this.props} searchText = { this.state.searchText } media = {videos}/>
   };
 
   searchCallback  = (event) => {

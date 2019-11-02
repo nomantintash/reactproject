@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import loaderGif from '../assets/loader.gif';
 const Video = ({media, userId, searchText,...props}) => {
     return (
         renderMediaObjects(media, userId, searchText, props)
@@ -7,40 +8,47 @@ const Video = ({media, userId, searchText,...props}) => {
 }
 
 function renderMediaObjects (media, userId = null, searchText = null, props) {
-    if (!media) return (<div>Media not found</div>)
-    const videos =  Object.keys(media).map (key => {
-      if ( searchText === media[key].description || userId === media[key].userId || searchText === "") {
+    if (!media) return ( 
+      <div style = { styles.loadingDiv }>
+        <img src = {loaderGif}  height = "150px" width = "150px"/> 
+        Loading Media
+      </div>
+    );
+    const videos =  media.map (media => {
+      if ( searchText === media.description || userId === media.userId || searchText === "") {
           return (
               <div
                 className="col-md-4 transparent mediaBox"
-                key={key}
-                onClick={event => loadMediaDetails(key, props)}
+                key={media.key}
                 style={styles.mediaDiv}
               >
-                <div className="card border-0">
-                <div className="card-header bg-transparent border-0">{media[key].description}</div>
+                <div className="card border-0" key={media.key}
+                onClick={event => loadMediaDetails(media.key, props)}>
+                <div className="card-header bg-transparent border-0">{media.description}</div>
                   <div className="container">
                     <video style = {styles.imageStyle} className = "card-img-top mediaBox">
-                    <source src={media[key].mediaURL}/>
+                    <source src={media.mediaURL}/>
                     </video>
                     <div style = {styles.iconBackground}>
                     <span>
                       <i className="far fa-thumbs-up" style =  {styles.iconStyle}></i>
-                      { media[key].likes? Object.keys(media[key].likes).length : 0}
+                      { media.likes? Object.keys(media.likes).length : 0}
                       
                     </span>
                     <span>
                       <i className="far fa-comments" style = {styles.iconStyle}></i>
-                      { media[key].comments? Object.keys(media[key].comments).length : 0}
+                      { media.comments? Object.keys(media.comments).length : 0}
                     </span>
                     <span>
                       <i className="fas fa-eye" style = {styles.iconStyle}></i>
-                      { media[key].views? Object.keys(media[key].views).length : 0}
+                      { media.views? Object.keys(media.views).length : 0}
                     </span>
                     </div>
                   </div>
                   <div className="card-footer bg-transparent border-0">
-                    <small className="text-muted">{moment(media[key].uploadedTime).fromNow()}</small>
+                  <small className="text-muted">Status: {media.published? "Published": "Not Published"}</small> 
+                  <br/>
+                    <small className="text-muted">{moment(media.uploadedTime).fromNow()}</small>
                   </div>
                 </div>
               </div>
@@ -64,6 +72,14 @@ const styles = {
   },
   cardStyle: {
     backgroundColor: '#f0f5f5'
+  },
+  loadingDiv: {
+    marginTop: '85px',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
   },
   iconStyle: {
     marginRight: '5px',

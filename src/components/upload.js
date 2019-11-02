@@ -3,12 +3,20 @@ import { firebaseMediaUpload } from '../actions/media-action';
 import { connect } from 'react-redux';
 import Dropzone from 'react-dropzone';
 import loaderGif from '../assets/loader.gif';
+import moment from 'moment';
+import TimePicker from 'rc-time-picker';
+import 'rc-time-picker/assets/index.css';
+
+const showSecond = false;
+const str = showSecond ? 'HH:mm:ss' : 'HH:mm';
 
 class MediaUpload extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            description: ''
+            description: '',
+            publish: false,
+            publishTime: null
         };
     }
     onMediaDrop (files) {
@@ -17,16 +25,38 @@ class MediaUpload extends Component {
             alert ('Video description is required');
             return;
         }
-        const description = this.state.description;
-        this.setState ({description: ''});
-        this.uploadMediaToFirebase (file, description);
+        console.log('this.state.publishTime', this.state.publishTime)
+        if (this.state.publish && !this.state.publishTime) {
+            alert('Publish time is required');
+            return;
+        }
+        const metadata = {
+            description: this.state.description,
+            publish: this.state.publish,
+            publishTime: this.state.publishTime
+        }
+        this.setState ({description: '', publish: false, publishTime: null});
+        this.uploadMediaToFirebase (file, metadata);
     };
 
-    uploadMediaToFirebase (media, description) {
-        this.props.firebaseMediaUpload (media, description, this.props.user.uid);
+    uploadMediaToFirebase (media, metadata) {
+        metadata.userId = this.props.user.uid;
+        this.props.firebaseMediaUpload (media, metadata);
     };
     descriptionChangeHandler=(event) => {
         this.setState ({description: event.target.value});
+    }
+    setPublishFlag = () => {
+        this.setState({publish: true});
+    }
+    onChange = (value) => {
+        const currentData  = moment().format("YYYY-MM-DD")
+        const dateString = currentData + " " + value.format(str);
+        const dateTimeParts = dateString.split(' ');
+        const timeParts = dateTimeParts[1].split(':');
+        const dateParts = dateTimeParts[0].split('-');
+        const timestamp = new Date(dateParts[0], parseInt(dateParts[1], 10) - 1, dateParts[2], timeParts[0], timeParts[1]);
+        this.setState ({publishTime: timestamp.getTime()});
     }
 
     render () {
@@ -41,9 +71,30 @@ class MediaUpload extends Component {
                     </Dropzone>
                 </div>
                 </div>
+                
                 <div style = { Object.assign({}, styles.div, styles.inputDiv) }>
                     <input type= "text" placeholder = "Type video description" onChange = { this.descriptionChangeHandler } className="form-control" style = {styles.inputField}/>
                 </div>
+                <div style = {styles.publishDiv}>
+                    <div>
+                    <div className="checkbox">
+                        <label><input type="checkbox" onChange = {this.setPublishFlag}/><span style = {styles.publishDiv.text}>Publish Later</span></label>
+                    </div>
+                    </div>
+                    <div>
+                        <span style = {styles.publishDiv.text}>Schedule on: </span>
+                    <TimePicker
+                        style={{ width: 100 }}
+                        showSecond={showSecond}
+                        defaultValue={moment()}
+                        className="xxx"
+                        onChange={this.onChange}
+                    />
+                    </div>
+                    
+                </div>
+                
+                
             </div>
         );
     }
@@ -64,6 +115,15 @@ const styles = {
         flexGrow: '1',
         flexDirection: 'column',
         justifyContent: 'center'
+    },
+    publishDiv: {
+        display: 'flex',
+        flexDirection: 'row',
+        paddingTop: '10px',
+        text: {
+            fontSize: '15px',
+            marginLeft: '10px'
+        }
     },
     image: {
         position: 'fixed',
